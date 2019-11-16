@@ -26,14 +26,33 @@ module.exports = new Plugin({
 function send_msg() {
     window.monkeyPatch(findModule('sendMessage'), 'sendMessage', b => {
         if (toggle_on) {
-            var recv = b.methodArguments[1].content.replace("🔒", "")
-            var cypher = CryptoJS.AES.encrypt(recv, password);
-            b.methodArguments[1].content = cypher + " ";
+			if(getOS() == 'Linux') {
+				var recv = b.methodArguments[1].content.replace("[!]", "")
+			} else {
+				var recv = b.methodArguments[1].content.replace("🔒", "")
+			}
+			var cypher = CryptoJS.AES.encrypt(recv, password);
+			b.methodArguments[1].content = cypher + " ";
         }
         return b.callOriginalMethod(b.methodArguments);
     });
 }
 
+function getOS() {
+	var userAgent = window.navigator.userAgent,
+		platform = window.navigator.platform,
+		macosPlatforms = ['Macintosh', 'MacIntel', 'MacPPC', 'Mac68K'],
+		windowsPlatforms = ['Win32', 'Win64', 'Windows', 'WinCE'],
+		iosPlatforms = ['iPhone', 'iPad', 'iPod'],
+		os = null;
+
+	if (windowsPlatforms.indexOf(platform) !== -1) {
+		os = 'Windows';
+	} else if (!os && /Linux/.test(platform)) {
+  		os = 'Linux';
+	}
+	return os;
+}
 
 function decryptDiscordMessages(password) {
     setTimeout(function () {
@@ -61,13 +80,17 @@ function decryptDiscordMessages(password) {
 decryptDiscordMessages(password);
 
 function registerMessageHook() {
+	if(getOS() == 'Linux') {
+    var lock_ico = "[!]";
+	} else {
     var lock_ico = "🔒";
+	}
     setTimeout(registerMessageHook, 25);
     var targetNode = document.getElementsByClassName('textArea-2Spzkt')[0];
     if (targetNode == undefined) return;
     if (targetNode.value.startsWith(lock_ico) != toggle_on) {
         if (toggle_on) targetNode.value = lock_ico + " " + targetNode.value.trim();
-        else targetNode.value = targetNode.value.replace(lock_ico, " ")
+        else targetNode.value = targetNode.value.replace(lock_ico, "")
     }
     targetNode.onkeydown = function (e) {
         var message = targetNode.value;
