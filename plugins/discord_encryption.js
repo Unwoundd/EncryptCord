@@ -12,9 +12,9 @@ var cyph = ""
 
 module.exports = new Plugin({
 
-    name: 'PGP Prototype',
+    name: 'Encryptcord Alpha',
     author: 'Unwound',
-    description: "PGP encryption - automated.",
+    description: "Integrated AES encryption - Hit F2 to toggle",
     color: 'indigo',
 
     load: function () {
