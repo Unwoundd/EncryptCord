@@ -1,0 +1,4 @@
+/home/ouji/build-DIscord-encryption-gui-Desktop-Minimum-Size-Release/CMakeFiles/rebuild_cache.dir
+/home/ouji/build-DIscord-encryption-gui-Desktop-Minimum-Size-Release/CMakeFiles/DIscord-encryption-gui.dir
+/home/ouji/build-DIscord-encryption-gui-Desktop-Minimum-Size-Release/CMakeFiles/edit_cache.dir
+/home/ouji/build-DIscord-encryption-gui-Desktop-Minimum-Size-Release/CMakeFiles/DIscord-encryption-gui_autogen.dir
