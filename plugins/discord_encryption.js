@@ -85,7 +85,7 @@ function decryptDiscordMessages(password) {
                 if (toggle_fun_on) {
                     nodes[i].innerHTML = '<marquee><b style="background-color:black;color:green;font-size:125%;">' + message + '</b></marquee>';
                 } else {
-                    nodes[i].innerHTML = '<b style="color:PaleTurquoise;font-size:125%;">' + message + '</b>>';
+                    nodes[i].innerHTML = '<b style="color:PaleTurquoise;font-size:125%;">' + message + '</b>';
                 }
             }
         } catch (error) {
