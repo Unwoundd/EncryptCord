@@ -4,6 +4,17 @@ var toggle_enc_on = false;
 var toggle_view_on = true;
 var toggle_fun_on = false;
 var need_showkey = false;
+
+var emotes_map = { //Consider putting this mapping into a different file
+    ":scard:": '<img src="https://discordemoji.com/assets/emoji/9482_PepeRun.gif" height="50" width="50">',
+    ":nom:": '<img src="https://discordemoji.com/assets/emoji/1301_nom_party.gif" height="50" width="50">',
+    ":zoomerdance:": '<img src="https://discordemoji.com/assets/emoji/4943_zoomer.gif" height="100" width="100">',
+    "roll": '<img src="https://discordemoji.com/assets/emoji/3993_bluba_roll.gif" height="50" width="50">',
+    "pepecorn": '<img src="https://media.giphy.com/media/TJAQ0db5zli6s/giphy.gif" height="50" width="50">'
+};
+
+
+
 /////////////////////////////////////
 // Replace any messages we manage to decrypt.
 
@@ -47,7 +58,18 @@ function send_msg() {
             need_showkey = true;
         }
 
-        if (toggle_enc_on) {
+        enc_single = false; //Encrypt when emoji detected
+        for (var col in emotes_map) { //Global emojis
+            if (message.includes(col)) {
+                console.log("message contained emote:" + col);
+                message = message.replace(col, emotes_map[col]);
+            }
+            console.log(col);
+            b.methodArguments[1].content = message;
+            enc_single = true;
+        }
+
+        if (toggle_enc_on || enc_single) {
             let message = b.methodArguments[1].content;
 
             if (getOS() != "Linux") {
@@ -58,7 +80,9 @@ function send_msg() {
             let cypher = String(CryptoJS.AES.encrypt(message, password));
             cypher = ensure_cypher(cypher);
             b.methodArguments[1].content = cypher;
+            enc_single = false
         }
+
         return b.callOriginalMethod(b.methodArguments);
     });
 }
