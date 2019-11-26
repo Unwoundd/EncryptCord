@@ -8,7 +8,7 @@ var need_showkey = false;
 var emotes_map = { //Consider putting this mapping into a different file
     ":scard:": '<img src="https://discordemoji.com/assets/emoji/9482_PepeRun.gif" height="50" width="50">',
     ":nom:": '<img src="https://discordemoji.com/assets/emoji/1301_nom_party.gif" height="50" width="50">',
-    ":zoomerdance:": '<img src="https://discordemoji.com/assets/emoji/4943_zoomer.gif" height="100" width="100">',
+    ":zoomerdance:": '<img src="https://discordemoji.com/assets/emoji/4943_zoomer.gif" height="100" width="125">',
     "roll": '<img src="https://discordemoji.com/assets/emoji/3993_bluba_roll.gif" height="50" width="50">',
     "pepecorn": '<img src="https://media.giphy.com/media/TJAQ0db5zli6s/giphy.gif" height="50" width="50">'
 };
