@@ -1,6 +1,10 @@
 **/.vs
 **/bin
 **/obj
+.eslintrc.json
+.gitconfig
+LICENSE
+bd.css
 config.json
 injection.js
 plugin.js
