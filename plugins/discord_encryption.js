@@ -98,7 +98,7 @@ decryptDiscordMessages(password);
 function registerMessageHook() {
     let lock_ico = "🔒"
     if (getOS() == "Linux") {
-        let lock_ico = "[!]";
+        lock_ico = "[!]";
     }
     setTimeout(registerMessageHook, 25);
     let targetNode = document.getElementsByClassName("textArea-2Spzkt")[0];
