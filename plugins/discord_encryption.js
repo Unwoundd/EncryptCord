@@ -63,10 +63,9 @@ function send_msg() {
             if (message.includes(col)) {
                 console.log("message contained emote:" + col);
                 message = message.replace(col, emotes_map[col]);
+                b.methodArguments[1].content = message;
+                enc_single = true;
             }
-            console.log(col);
-            b.methodArguments[1].content = message;
-            enc_single = true;
         }
 
         if (toggle_enc_on || enc_single) {
@@ -80,7 +79,7 @@ function send_msg() {
             let cypher = String(CryptoJS.AES.encrypt(message, password));
             cypher = ensure_cypher(cypher);
             b.methodArguments[1].content = cypher;
-            enc_single = false
+            enc_single = false;
         }
 
         return b.callOriginalMethod(b.methodArguments);
