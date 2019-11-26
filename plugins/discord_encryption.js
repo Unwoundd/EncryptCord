@@ -3,6 +3,7 @@ var password = "Khr7pKJNLXd+Zstn3sZ3MIbLm43KeIcc1TeqegCx5WXJ+LY9Ndxp4r+2ic0iV7Pm
 var toggle_enc_on = false;
 var toggle_view_on = true;
 var toggle_fun_on = false;
+var need_showkey = false;
 /////////////////////////////////////
 // Replace any messages we manage to decrypt.
 
@@ -17,7 +18,7 @@ module.exports = new Plugin({
 
     load: function () {
         send_msg();
-        decryptDiscordMessages(password);
+        decryptDiscordMessages();
     }
 });
 
@@ -33,12 +34,17 @@ function ensure_cypher(cypher, reverse = false) {
 function send_msg() {
     window.monkeyPatch(findModule("sendMessage"), "sendMessage", b => {
 
-
         let message = b.methodArguments[1].content;
         if (message.startsWith('/key=')) {
-            console.log("Prior password:" + password)
+            console.log("Prior Key:" + password)
             password = message.split("=")[1];
-            console.log("Password set! current key:" + password);
+            console.log("Key set! current key:" + password);
+            b.methodArguments[1].content = "";
+
+        } else if (message.startsWith("/showkey") || message.startsWith("/key")) {
+            console.log("Current key:" + password)
+            b.methodArguments[1].content = "";
+            need_showkey = true;
         }
 
         if (toggle_enc_on) {
@@ -74,9 +80,9 @@ function getOS() {
     return os;
 }
 
-function decryptDiscordMessages(password) {
+function decryptDiscordMessages() {
     setTimeout(function () {
-        decryptDiscordMessages(password)
+        decryptDiscordMessages()
     }, 10);
     let nodes = document.getElementsByClassName("markup-2BOw-j");
     for (let i = nodes.length; i--;) {
@@ -103,7 +109,7 @@ function decryptDiscordMessages(password) {
         }
     }
 }
-decryptDiscordMessages(password);
+decryptDiscordMessages();
 
 function registerMessageHook() {
     let lock_ico = "🔒"
@@ -113,6 +119,10 @@ function registerMessageHook() {
     setTimeout(registerMessageHook, 25);
     let targetNode = document.getElementsByClassName("textArea-2Spzkt")[0];
     if (targetNode == undefined) return;
+    if (need_showkey) { //Show the password in the message entry when needed
+        targetNode.value = password;
+        need_showkey = false;
+    }
     if (targetNode.value.startsWith(lock_ico) != toggle_enc_on) {
         if (toggle_enc_on) targetNode.value = lock_ico + " " + targetNode.value.trim();
         else targetNode.value = targetNode.value.replace(lock_ico, "");
