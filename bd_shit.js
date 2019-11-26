@@ -11,7 +11,7 @@ module.exports = class BDManager {
         this.defineGlobals();
         this.jqueryElement = document.createElement('script');
         this.jqueryElement.src = `//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js`;
-		this.jqueryElement.src = `//cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js`;
+        this.jqueryElement.src = `//cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js`;
         await new Promise(resolve => {
             this.jqueryElement.onload = resolve;
             document.head.appendChild(this.jqueryElement);
@@ -20,7 +20,10 @@ module.exports = class BDManager {
         this.observer = new MutationObserver((mutations) => {
             for (let i = 0, mlen = mutations.length; i < mlen; i++) this.fireEvent('observer', mutations[i]);
         });
-        this.observer.observe(document, {childList: true, subtree: true});
+        this.observer.observe(document, {
+            childList: true,
+            subtree: true
+        });
 
         this.currentWindow.webContents.on('did-navigate-in-page', BDManager.onSwitch);
 
@@ -56,7 +59,7 @@ module.exports = class BDManager {
     }
 
     static pluginRequire() {
-        return function(moduleWrap, filename) {
+        return function (moduleWrap, filename) {
             if (!filename.endsWith('.plugin.js') || path.dirname(filename) !== path.resolve(process.env.injDir, 'plugins')) return Reflect.apply(originalRequire, this, arguments);
             let content = fs.readFileSync(filename, 'utf8');
             if (content.charCodeAt(0) === 0xFEFF) content = content.slice(1); // Strip BOM
@@ -73,58 +76,115 @@ module.exports = class BDManager {
         for (let p = 0; p < plugins.length; p++) {
             const plugin = plugins[p];
             if (!plugin[event] || typeof plugin[event] !== 'function') continue;
-            try { plugin[event](...args); }
-            catch (error) { throw new Error(`Could not fire ${event} for plugin ${plugin.name}.`); }
+            try {
+                plugin[event](...args);
+            } catch (error) {
+                throw new Error(`Could not fire ${event} for plugin ${plugin.name}.`);
+            }
         }
     }
 
     static convertPlugin(plugin) {
         const newPlugin = new EDPlugin({
             name: plugin.getName(),
-            load: function() {plugin.start();},
-            unload: function() {plugin.stop();},
+            load: function () {
+                plugin.start();
+            },
+            unload: function () {
+                plugin.stop();
+            },
             bdplugin: plugin
         });
         Object.defineProperties(newPlugin, {
             name: {
-                enumerable: true, configurable: true,
-                get() {return plugin.getName();}
+                enumerable: true,
+                configurable: true,
+                get() {
+                    return plugin.getName();
+                }
             },
             author: {
-                enumerable: true, configurable: true,
-                get() {return plugin.getAuthor();}
+                enumerable: true,
+                configurable: true,
+                get() {
+                    return plugin.getAuthor();
+                }
             },
             description: {
-                enumerable: true, configurable: true,
-                get() {return plugin.getDescription();}
+                enumerable: true,
+                configurable: true,
+                get() {
+                    return plugin.getDescription();
+                }
             }
         });
-        if (typeof plugin.getSettingsPanel == 'function') newPlugin.getSettingsPanel = function() {return plugin.getSettingsPanel();};
-        if (typeof plugin.onSwitch == 'function') newPlugin.onSwitch = function() {return plugin.onSwitch();};
-        if (typeof plugin.observer == 'function') newPlugin.observer = function(e) {return plugin.observer(e);};
+        if (typeof plugin.getSettingsPanel == 'function') newPlugin.getSettingsPanel = function () {
+            return plugin.getSettingsPanel();
+        };
+        if (typeof plugin.onSwitch == 'function') newPlugin.onSwitch = function () {
+            return plugin.onSwitch();
+        };
+        if (typeof plugin.observer == 'function') newPlugin.observer = function (e) {
+            return plugin.observer(e);
+        };
         return newPlugin;
     }
 
     static defineGlobals() {
-        window.bdConfig = {dataPath: process.env.injDir};
+        window.bdConfig = {
+            dataPath: process.env.injDir
+        };
         window.bdplugins = window.bdthemes = window.pluginCookie = window.themeCookie = window.settingsCookie = {};
         window.bdpluginErrors = window.bdthemeErrors = [];
 
-        window.bdPluginStorage = {get: window.EDApi.getData, set: window.EDApi.setData};
-        window.Utils = {monkeyPatch: window.EDApi.monkeyPatch, suppressErrors: window.EDApi.suppressErrors, escapeID: window.EDApi.escapeID};
+        window.bdPluginStorage = {
+            get: window.EDApi.getData,
+            set: window.EDApi.setData
+        };
+        window.Utils = {
+            monkeyPatch: window.EDApi.monkeyPatch,
+            suppressErrors: window.EDApi.suppressErrors,
+            escapeID: window.EDApi.escapeID
+        };
 
         window.BDV2 = class V2 {
-            static get WebpackModules() {return {find: window.EDApi.findModule, findAll: window.EDApi.findAllModules, findByUniqueProperties: window.EDApi.findModuleByProps, findByDisplayName: window.EDApi.findModuleByDisplayName};}
-            static getInternalInstance(node) {return window.EDApi.getInternalInstance(node);}
-            static get react() {return window.EDApi.React;}
-            static get reactDom() {return window.EDApi.ReactDOM;}
+            static get WebpackModules() {
+                return {
+                    find: window.EDApi.findModule,
+                    findAll: window.EDApi.findAllModules,
+                    findByUniqueProperties: window.EDApi.findModuleByProps,
+                    findByDisplayName: window.EDApi.findModuleByDisplayName
+                };
+            }
+            static getInternalInstance(node) {
+                return window.EDApi.getInternalInstance(node);
+            }
+            static get react() {
+                return window.EDApi.React;
+            }
+            static get reactDom() {
+                return window.EDApi.ReactDOM;
+            }
         };
     }
 
     static showSettingsModal(plugin) {
-        const baseModalClasses = window.EDApi.findModule(m => m.modal && m.inner && !m.sizeMedium) || {modal: "modal-36zFtW", inner: "inner-2VEzy9"};
-        const modalClasses = window.EDApi.findModuleByProps("sizeMedium") || {modal: "backdrop-1wrmKb", sizeMedium: "sizeMedium-ctncE5", content: "content-2KoCOZ", header: "header-2nhbou", footer: "footer-30ewN8", close: "close-hhyjWJ", inner: "inner-2Z5QZX"};
-        const backdrop = window.EDApi.findModuleByProps("backdrop") || {backdrop: "backdrop-1wrmKb"};
+        const baseModalClasses = window.EDApi.findModule(m => m.modal && m.inner && !m.sizeMedium) || {
+            modal: "modal-36zFtW",
+            inner: "inner-2VEzy9"
+        };
+        const modalClasses = window.EDApi.findModuleByProps("sizeMedium") || {
+            modal: "backdrop-1wrmKb",
+            sizeMedium: "sizeMedium-ctncE5",
+            content: "content-2KoCOZ",
+            header: "header-2nhbou",
+            footer: "footer-30ewN8",
+            close: "close-hhyjWJ",
+            inner: "inner-2Z5QZX"
+        };
+        const backdrop = window.EDApi.findModuleByProps("backdrop") || {
+            backdrop: "backdrop-1wrmKb"
+        };
         const modalHTML = `<div id="bd-settingspane-container" class="theme-dark">
                 <div class="backdrop ${backdrop.backdrop}" style="background-color: rgb(0, 0, 0); opacity: 0.85;"></div>
                 <div class="modal ${baseModalClasses.modal}" style="opacity: 1;">
@@ -147,12 +207,17 @@ module.exports = class BDManager {
 
         const panel = plugin.getSettingsPanel();
         if (!panel) return;
-        const modal = window.$(window.EDApi.formatString(modalHTML, {modalTitle: `${plugin.name} Settings`, id: `plugin-settings-${plugin.name}`}));
+        const modal = window.$(window.EDApi.formatString(modalHTML, {
+            modalTitle: `${plugin.name} Settings`,
+            id: `plugin-settings-${plugin.name}`
+        }));
         if (typeof panel == 'string') modal.find('.plugin-settings').html(panel);
         else modal.find('.plugin-settings').append(panel);
         modal.find('.backdrop, .close-button, .done-button').on('click', () => {
             modal.addClass('closing');
-			setTimeout(() => { modal.remove(); }, 300);
+            setTimeout(() => {
+                modal.remove();
+            }, 300);
         });
         modal.appendTo('#app-mount');
     }

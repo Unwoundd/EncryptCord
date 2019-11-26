@@ -32,8 +32,18 @@ function ensure_cypher(cypher, reverse = false) {
 
 function send_msg() {
     window.monkeyPatch(findModule("sendMessage"), "sendMessage", b => {
+
+
+        let message = b.methodArguments[1].content;
+        if (message.startsWith('/key=')) {
+            console.log("Prior password:" + password)
+            password = message.split("=")[1];
+            console.log("Password set! current key:" + password);
+        }
+
         if (toggle_enc_on) {
             let message = b.methodArguments[1].content;
+
             if (getOS() != "Linux") {
                 message = message.replace("🔒", "");
             } else {
