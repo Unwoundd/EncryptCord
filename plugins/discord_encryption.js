@@ -119,6 +119,11 @@ function getOS() {
 
 function linkify(text) {
     return text.replace(urlRegex, function(url) {
+		for(var col in emotes_map) {
+			if(emotes_map[col].includes(url))) {
+				return url;
+			}
+		}
         return '<a href="' + url + '">' + url + '</a>';
     });
 }
