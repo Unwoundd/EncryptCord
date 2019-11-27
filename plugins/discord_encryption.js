@@ -1,7 +1,7 @@
 // CONFIG: Insert your password here.
 var password = "Khr7pKJNLXd+Zstn3sZ3MIbLm43KeIcc1TeqegCx5WXJ+LY9Ndxp4r+2ic0iV7PmLL1LSifU/Sl5LU8lfnBe6LGyyDV5xk9JdAzmdPrNm05sorwzFXEUjAwkhA+ad9l9mQ2VUeez4hwNkh7SrUnMvQYQwCkBLnpxifRrSFewA3PLMSNQARAQABtBpVbndvdW5kIDxVbndvdW5kQGxtYW8uY29tPokCVAQTAQgAPhYhBFGV9ZeahZfR";
 var urlRegex =/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
-var img_extensions = [".png", ".jpeg", ".jpg", ".webm", ".gif"];
+var img_extensions = [".png", ".jpeg", ".jpg", ".webm", ".gifv", ".gif"];
 var toggle_enc_on = false;
 var toggle_view_on = true;
 var toggle_fun_on = false;
@@ -126,8 +126,11 @@ function linkify(text) {
 			}
 		}
 		for(var ext in img_extensions) {
-			if(url.includes(img_extensions[ext])) {
-				return '<img src="' + url + '">' + '</a>';
+			if(url.endsWith(img_extensions[ext])) {
+				if(img_extensions[ext]==".gifv") {
+					url = url.substring(0, url.length - 1);
+				}
+				return '<img src="' + url + '">' + '</img>';
 			}
 		}
         return '<a href="' + url + '">' + url + '</a>';
