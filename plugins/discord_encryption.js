@@ -10,11 +10,24 @@ var emotes_map = { //Consider putting this mapping into a different file
     ":nom:": '<img src="https://discordemoji.com/assets/emoji/1301_nom_party.gif" height="50" width="50">',
     ":zoomerdance:": '<img src="https://discordemoji.com/assets/emoji/4943_zoomer.gif" height="100" width="125">',
     ":roll:": '<img src="https://discordemoji.com/assets/emoji/3993_bluba_roll.gif" height="50" width="50">',
+    ":BBoomer:": '<img src="https://cdn.betterttv.net/emote/5c447084f13c030e98f74f58/3x" height="50" width="50">',
+    ":ricardo:": '<img src="https://cdn.betterttv.net/emote/5bc2143ea5351f40921080ee/3x" height="50" width="50">',
+    ":pepeShake:": '<img src="https://cdn.betterttv.net/emote/58d867c84c25f4458349ecc7/3x" height="50" width="50">',
+    ":BoomerDance:": '<img src="https://discordemoji.com/assets/emoji/8277_boomerdance.gif" height="50" width="50">',
+    ":PepeHmm:": '<img src="https://discordemoji.com/assets/emoji/PepeHmm.gif" height="50" width="50">',
+    ":PepeDab:": '<img src="https://discordemoji.com/assets/emoji/7284_Pepe_SwagDab.gif" height="50" width="50">',
+    ":JoyRow:": '<img src="https://discordemoji.com/assets/emoji/JoyRow.gif" height="50" width="50">',
+    ":ThonkSpin:": '<img src="https://discordemoji.com/assets/emoji/ThonkSpin.gif" height="50" width="50">',
+    ":PepeKeking:": '<img src="https://discordemoji.com/assets/emoji/PepeLmfaoooo.gif" height="50" width="50">',
+    ":PepeRain:": '<img src="https://discordemoji.com/assets/emoji/PepeRain.gif" height="50" width="50">',
+    ":ppHop:": '<img src="https://discordemoji.com/assets/emoji/ppHop.gif" height="50" width="50">',
+    ":CheekiBriki:": '<img src="https://discordemoji.com/assets/emoji/CheekiBreeki.png" height="50" width="50">',
+    ":Hacking:": '<img src="https://discordemoji.com/assets/emoji/9879_hackerman.gif" height="50" width="50">',
+    ":Pepega:": '<img src="https://discordemoji.com/assets/emoji/9716_Pepega.png" height="50" width="50">',
+    ":REEE:": '<img src="https://discordemoji.com/assets/emoji/REEE.gif" height="50" width="50">',
     ":pepecorn:": '<img src="https://media.giphy.com/media/TJAQ0db5zli6s/giphy.gif" height="50" width="50">'
+
 };
-
-
-
 /////////////////////////////////////
 // Replace any messages we manage to decrypt.
 
