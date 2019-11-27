@@ -1,6 +1,7 @@
 // CONFIG: Insert your password here.
 var password = "Khr7pKJNLXd+Zstn3sZ3MIbLm43KeIcc1TeqegCx5WXJ+LY9Ndxp4r+2ic0iV7PmLL1LSifU/Sl5LU8lfnBe6LGyyDV5xk9JdAzmdPrNm05sorwzFXEUjAwkhA+ad9l9mQ2VUeez4hwNkh7SrUnMvQYQwCkBLnpxifRrSFewA3PLMSNQARAQABtBpVbndvdW5kIDxVbndvdW5kQGxtYW8uY29tPokCVAQTAQgAPhYhBFGV9ZeahZfR";
 var urlRegex =/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+var img_extensions = [".png", ".jpeg", ".jpg", ".webm", ".gif"];
 var toggle_enc_on = false;
 var toggle_view_on = true;
 var toggle_fun_on = false;
@@ -122,6 +123,11 @@ function linkify(text) {
 		for(var col in emotes_map) {
 			if(emotes_map[col].includes(url)) {
 				return url;
+			}
+		}
+		for(var ext in img_extensions) {
+			if(url.includes(img_extensions[ext])) {
+				return '<img src="' + url + '">' + '</a>';
 			}
 		}
         return '<a href="' + url + '">' + url + '</a>';
