@@ -1,5 +1,7 @@
 // CONFIG: Insert your password here.
 var password = "Khr7pKJNLXd+Zstn3sZ3MIbLm43KeIcc1TeqegCx5WXJ+LY9Ndxp4r+2ic0iV7PmLL1LSifU/Sl5LU8lfnBe6LGyyDV5xk9JdAzmdPrNm05sorwzFXEUjAwkhA+ad9l9mQ2VUeez4hwNkh7SrUnMvQYQwCkBLnpxifRrSFewA3PLMSNQARAQABtBpVbndvdW5kIDxVbndvdW5kQGxtYW8uY29tPokCVAQTAQgAPhYhBFGV9ZeahZfR";
+var urlRegex =/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+var img_extensions = [".png", ".jpeg", ".jpg", ".webm", ".gifv", ".gif"];
 var toggle_enc_on = false;
 var toggle_view_on = true;
 var toggle_fun_on = false;
@@ -116,6 +118,25 @@ function getOS() {
     return os;
 }
 
+function linkify(text) {
+    return text.replace(urlRegex, function(url) {
+		for(var col in emotes_map) {
+			if(emotes_map[col].includes(url)) {
+				return url;
+			}
+		}
+		for(var ext in img_extensions) {
+			if(url.endsWith(img_extensions[ext])) {
+				if(img_extensions[ext]==".gifv") {
+					url = url.substring(0, url.length - 1);
+				}
+				return '<img src="' + url + '">' + '</img>';
+			}
+		}
+        return '<a href="' + url + '">' + url + '</a>';
+    });
+}
+
 function decryptDiscordMessages() {
     setTimeout(function () {
         decryptDiscordMessages()
@@ -131,7 +152,7 @@ function decryptDiscordMessages() {
         try {
 
             if (toggle_view_on) {
-                let message = decrypted.toString(CryptoJS.enc.Utf8);
+                let message = linkify(decrypted.toString(CryptoJS.enc.Utf8));
                 if (message == "") continue;
 
                 if (toggle_fun_on) {
